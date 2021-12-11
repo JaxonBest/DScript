@@ -77,3 +77,13 @@ So you can use the 'raw' keyword at the start of every line to write pure Python
 raw if 1 + 1 >= 2:
 raw     print("Did you know 1 + 1 >= 2?")
 ```
+
+##### External Modules
+
+You can import a module inside of DS easily.
+
+Here is an example.
+```
+use sleep from time
+use datetime
+```
