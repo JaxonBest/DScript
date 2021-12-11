@@ -93,3 +93,16 @@ Here is an example.
 use sleep from time
 use datetime
 ```
+
+### Comments
+
+Feel free to make a comment inside of your code on any free new line.
+
+Here is an example..
+
+```txt
+c Send the variable called 'string'
+com This is the long way of making a comment.
+var string = "Hello, World"
+send $string
+```

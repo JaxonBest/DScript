@@ -1,8 +1,16 @@
+# TODO: Make it so their are optional unique identifies for variables.
+
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
+
+def com(command, ln) -> str:
+    return '# {}'.format(' '.join(x for x in command['args']))
+
+def c(command, ln):
+    return com(command, ln)
 
 def sendto(command, ln) -> str:
     if len(command['args']) <= 1:
@@ -12,9 +20,9 @@ def sendto(command, ln) -> str:
     channel_var, is_channel_var = _get_and_check_if_var(command['args'][0][1:])
     if not is_channel_var:
         raise Exception('Line {}\n"{}" is not a variable. Maybe you forgot to add the "$"?'
-        .format(ln, command['args'][0]))
+        .format(ln, command['args'][0][1:]))
 
-    cnt_res = '"{}"'.format(' '.join(x for x in command['args'][1:]))
+    cnt_res = '"{}"'.format(' '.join(x.replace('"', "'") for x in command['args'][1:]))
     cnt_var, cnt_is_var = _get_and_check_if_var(pos_var_content[1:]) # Indexing here to remove the '$'
     if cnt_is_var:
         cnt_res = cnt_var['name']
@@ -57,6 +65,7 @@ def getchannel(command, ln) -> str:
     else:
         ref = ('int(' if by == 'id' else '') + ('"') + command['args'][2] + ('"') + (')' if by == 'id' else '')
     
+    variables.append({'name': command['args'][1], 'value': ref})
     return '{} = discord.utils.get(ctx.guild.channels, {}={})'.format(command['args'][1], command['args'][0].lower(), ref)
 
 def get_executer(command, ln) -> str:

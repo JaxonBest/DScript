@@ -7,8 +7,7 @@ import discord
 # From Imports
 from discord.ext import commands
 
-discordiscool = "Hello, World.. Kill me!"
-ctx.send(discordiscool) # Sending a message to the same channel the message was sent in.
-hello = None
-welcomeToPHLive = "Hello, World"
-hello.send(welcomeToPHLive)
+# Get and send a message to the channel.
+# Hi Hi!
+my_channel = discord.utils.get(ctx.guild.channels, id=int("1010101010"))
+my_channel.send("'Hello'")
