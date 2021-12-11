@@ -55,16 +55,20 @@ welcome = f"Hello, {variable_name_storing_author}"
 ctx.send(welcome) # Sending a message to the same channel the message was sent in.
 ```
 
-### 
-
 ### Text Channels
 
 Here are the following methods you can use with text channels.
 
-##### Getting a Text Channel from ID/Name
+### Getting a Text Channel from ID/Name
 
-```
+```txt
 getchannel id my_channel_stored_variable $my_channel_id_var
+```
+
+```txt
+var my_message "Hello, World!"
+sendto $my_channel_id_var $my_message
+sendto $my_channel_id_var Hello, World.. Again!
 ```
 
 ### Working with Python
