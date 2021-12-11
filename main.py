@@ -2,6 +2,11 @@ lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 variables = []
 
+def raw(command, ln):
+    if len(command) < 1:
+        raise SyntaxError('Line {}\nMust have one or more arguments inside of a "raw" method.')
+    return ' '.join(x for x in command['args'])
+
 def arg(command, ln) -> str:
     if len(command['args']) < 1:
         raise Exception('Line {}\nYou must give the argument a name alongside with an optional type.')
