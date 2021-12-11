@@ -106,3 +106,16 @@ com This is the long way of making a comment.
 var string = "Hello, World"
 send $string
 ```
+
+### Arguments
+
+Adding arguments are super simple.
+
+Oftenly the best place to do it is at the top is the file so it doesn't blend in.
+
+```txt
+arg user
+
+c The below argument will default to hello_world since any space will transfer to a _
+arg hello world 
+```

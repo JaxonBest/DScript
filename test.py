@@ -11,3 +11,4 @@ from discord.ext import commands
 # Hi Hi!
 my_channel = discord.utils.get(ctx.guild.channels, id=int("1010101010"))
 my_channel.send("'Hello'")
+

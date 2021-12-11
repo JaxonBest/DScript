@@ -1,10 +1,14 @@
-# TODO: Make it so their are optional unique identifies for variables.
+# TODO: Create a base code template with args and set names dynamically.
 
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
+args = []
+name = 'untitled_command'
+
+
 
 def com(command, ln) -> str:
     return '# {}'.format(' '.join(x for x in command['args']))
@@ -26,7 +30,6 @@ def sendto(command, ln) -> str:
     cnt_var, cnt_is_var = _get_and_check_if_var(pos_var_content[1:]) # Indexing here to remove the '$'
     if cnt_is_var:
         cnt_res = cnt_var['name']
-
     return '{}.send({})'.format(channel_var['name'], cnt_res)
 
 def use(command, ln) -> str:
@@ -50,8 +53,9 @@ def raw(command, ln) -> str:
 
 def arg(command, ln) -> str:
     if len(command['args']) < 1:
-        raise Exception('Line {}\nYou must give the argument a name alongside with an optional type.')
-    return '# Argument "{}" now assigned with type "{}"'.format(command['args'][0], command['args'][1] if len('args') >= 2 else 'any')
+        raise Exception('Line {}\nYou must give the argument a name.')
+    args.append('_'.join(x for x in command['args'][0:]))
+    return ''
 
 def getchannel(command, ln) -> str: 
     by = command['args'][0].lower()
@@ -93,7 +97,7 @@ def cvv(command, ln) -> str:
     at_index = None
     for varI in range(len(variables)):
         var = variables[varI]
-        if var['name'] == command['args'][0]:
+        if var['name'] == command['args'][0][1:]:
             var_info = var
             at_index = varI
     if var_info is None:
@@ -185,3 +189,4 @@ with open('test.py', 'w') as f:
     f.write(compiled)
 
 print('Successfully compiled command.')
+print(args)
