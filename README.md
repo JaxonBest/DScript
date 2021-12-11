@@ -67,7 +67,7 @@ Here are the following methods you can use with text channels.
 getchannel id my_channel_stored_variable $my_channel_id_var
 ```
 
-##### Working with Python
+### Working with Python
 
 A lot of the time you will want to work with straight Python.
 
@@ -78,7 +78,7 @@ raw if 1 + 1 >= 2:
 raw     print("Did you know 1 + 1 >= 2?")
 ```
 
-##### External Modules
+### External Modules
 
 You can import a module inside of DS easily.
 
