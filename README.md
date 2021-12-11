@@ -59,11 +59,13 @@ ctx.send(welcome) # Sending a message to the same channel the message was sent i
 
 Here are the following methods you can use with text channels.
 
-### Getting a Text Channel from ID/Name
+#### Getting a Text Channel from ID/Name
 
 ```txt
 getchannel id my_channel_stored_variable $my_channel_id_var
 ```
+
+#### Send a message/variable to a channel via variable
 
 ```txt
 var my_message "Hello, World!"
