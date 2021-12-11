@@ -103,6 +103,7 @@ Here is an example..
 ```txt
 c Send the variable called 'string'
 com This is the long way of making a comment.
+// DSC also allows '//'
 var string = "Hello, World"
 send $string
 ```

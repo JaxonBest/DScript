@@ -7,8 +7,15 @@ import discord
 # From Imports
 from discord.ext import commands
 
-# Get and send a message to the channel.
-# Hi Hi!
-my_channel = discord.utils.get(ctx.guild.channels, id=int("1010101010"))
-my_channel.send("'Hello'")
 
+class untitled_command(commands.Bot):
+    def __init__(self, client):
+        self.client = client
+    
+    @commands.command(name="untitled_command")
+    async def untitled_command(ctx ):
+		print('Hello, World')
+        
+
+def setup(client):
+    client.add_cog(untitled_command(client))

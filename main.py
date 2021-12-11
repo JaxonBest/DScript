@@ -1,5 +1,3 @@
-# TODO: Create a base code template with args and set names dynamically.
-
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 variables = []
@@ -7,8 +5,6 @@ to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
 args = []
 name = 'untitled_command'
-
-
 
 def com(command, ln) -> str:
     return '# {}'.format(' '.join(x for x in command['args']))
@@ -130,6 +126,14 @@ def send(command, ln) -> str:
 def sformat(command, ln) -> str:
     return ' '.join(x for x in command['args'])
 
+def _filter_lines(lines) -> list:
+    nll = [] # New line list.
+    for line in lines:
+        if line.replace(' ', '') == '':
+            continue
+        nll.append(line)
+    return nll
+        
 def var(command, ln) -> str:
     name = command['args'][0]
     value = ' '.join(x for x in command['args'][1:])
@@ -154,9 +158,11 @@ def get_parts(line: str, line_number: int) -> dict:
     }
 
 output = []
+symbol_relations = {'//': com}
 
-for i in range(len(lines)):
-    line = lines[i]
+fl = _filter_lines(lines)
+for i in range(len(fl)):
+    line = fl[i]
     line_number = i + 1
 
     p = get_parts(line, line_number)
@@ -164,29 +170,51 @@ for i in range(len(lines)):
     possibles = globals().copy()
     possibles.update(locals())
     method = possibles.get(p['command'])
+
+    iv = False # Is Valid Symbol Command
+
     if not method:
-        raise SyntaxError('Line {}\n"{}" does not exist. Maybe try checking your spelling.'.format(line_number, p['command']))
-    ret = method(p, line_number)
+        if symbol_relations.get(p['command']) is not None:
+            iv = True
+        else:
+            raise SyntaxError('Line {}\n"{}" does not exist. Maybe try checking your spelling.'.format(line_number, p['command']))
+    
+    ret = method(p, line_number) if not iv else symbol_relations[p['command']](p, line_number)
     output.append(ret + '\n' if ret != '' or ret != None else '')
 
-compiled = ''
-compiled += '# Imports\n'
-for single_import in to_import:
-    compiled += 'import {}\n'.format(single_import)
-compiled += '\n'
+header = ''
 
-compiled += '# From Imports\n'
+compiled = ''
+header += '# Imports\n'
+for single_import in to_import:
+    header += 'import {}\n'.format(single_import)
+header += '\n'
+
+header += '# From Imports\n'
 for froms in from_imports:
-    compiled += 'from {} import {}\n'.format(froms['from'], froms['import'])
-compiled += '\n'
+    header += 'from {} import {}\n'.format(froms['from'], froms['import'])
+header += '\n'
 
 for line in output:
-    compiled += line
+    compiled += '\t\t' + line
+
+base = '''
+class {}(commands.Bot):
+    def __init__(self, client):
+        self.client = client
+    
+    @commands.command(name="{}")
+    async def {}(ctx{} {}):
+{}        
+
+def setup(client):
+    client.add_cog({}(client))
+'''.format(name, name,  name, ", " if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
 
 print("Compiling DSC into Python..")
 with open('test.py', 'w') as f:
     f.write('# Compiled with the DS Script Compiler.\n# {}\n\n'.format('-' * 35))
-    f.write(compiled)
+    f.write(header)
+    f.write(base)
 
 print('Successfully compiled command.')
-print(args)
