@@ -4,6 +4,23 @@ variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
 
+def sendto(command, ln) -> str:
+    if len(command['args']) <= 1:
+        raise SyntaxError('Line {}\nWhen using "sento" you must supply a channel and then a message/variable to use.'
+        .format(ln))
+    pos_var_content = command['args'][1]
+    channel_var, is_channel_var = _get_and_check_if_var(command['args'][0][1:])
+    if not is_channel_var:
+        raise Exception('Line {}\n"{}" is not a variable. Maybe you forgot to add the "$"?'
+        .format(ln, command['args'][0]))
+
+    cnt_res = '"{}"'.format(' '.join(x for x in command['args'][1:]))
+    cnt_var, cnt_is_var = _get_and_check_if_var(pos_var_content[1:]) # Indexing here to remove the '$'
+    if cnt_is_var:
+        cnt_res = cnt_var['name']
+
+    return '{}.send({})'.format(channel_var['name'], cnt_res)
+
 def use(command, ln) -> str:
     if len(command['args']) < 1:
         raise SyntaxError('Line {}\n"use" requires a import name/argument to be supplied.'.format(ln))
