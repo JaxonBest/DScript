@@ -1,6 +1,10 @@
 # Compiled with the DS Script Compiler.
+# -----------------------------------
 
+# Imports
 import discord
+
+# From Imports
 from discord.ext import commands
 
 discordiscool = "Hello, World.. Kill me!"

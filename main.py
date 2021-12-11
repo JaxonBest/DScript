@@ -1,6 +1,22 @@
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 variables = []
+to_import = ['discord']
+from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
+
+def use(command, ln) -> str:
+    if len(command['args']) < 1:
+        raise SyntaxError('Line {}\n"use" requires a import name/argument to be supplied.'.format(ln))
+    if len(command['args']) >= 3:
+        if command['args'][1].lower() != 'from':
+            raise SyntaxError('Line {}\nExpected keyword "FROM" instead got "{}"'.format(ln, command['args'][1]))
+        upper_import = command['args'][0] # from {}
+        inner_import = command['args'][2] # import {}
+        from_imports.append({'from': upper_import, 'import': inner_import})
+    elif len(command['args']) <= 2:
+        inner_import = command['args'][0]
+        to_import.append(inner_import)
+    return ''
 
 def raw(command, ln) -> str:
     if len(command) < 1:
@@ -107,7 +123,7 @@ def get_parts(line: str, line_number: int) -> dict:
         'args_joined': ' '.join(part for part in parts[1:])
     }
 
-output = ''
+output = []
 
 for i in range(len(lines)):
     line = lines[i]
@@ -120,12 +136,26 @@ for i in range(len(lines)):
     method = possibles.get(p['command'])
     if not method:
         raise SyntaxError('Line {}\n"{}" does not exist. Maybe try checking your spelling.'.format(line_number, p['command']))
-    output += (method(p, line_number) + '\n')
+    ret = method(p, line_number)
+    output.append(ret + '\n' if ret != '' or ret != None else '')
 
+compiled = ''
+compiled += '# Imports\n'
+for single_import in to_import:
+    compiled += 'import {}\n'.format(single_import)
+compiled += '\n'
+
+compiled += '# From Imports\n'
+for froms in from_imports:
+    compiled += 'from {} import {}\n'.format(froms['from'], froms['import'])
+compiled += '\n'
+
+for line in output:
+    compiled += line
 
 print("Compiling DSC into Python..")
 with open('test.py', 'w') as f:
-    f.write('# Compiled with the DS Script Compiler.\n\nimport discord\nfrom discord.ext import commands\n\n')
-    f.write(output)
+    f.write('# Compiled with the DS Script Compiler.\n# {}\n\n'.format('-' * 35))
+    f.write(compiled)
 
-print(output)
+print('Successfully compiled command.')
