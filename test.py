@@ -13,8 +13,14 @@ class untitled_command(commands.Bot):
         self.client = client
     
     @commands.command(name="untitled_command")
-    async def untitled_command(ctx ):
-		print('Hello, World')
+    async def untitled_command(ctx,  one,two,three):
+		# -> My first command.
+		
+		
+		
+		ctx.send(one) # Sending a message to the same channel the message was sent in.
+		ctx.send(two) # Sending a message to the same channel the message was sent in.
+		ctx.send(three) # Sending a message to the same channel the message was sent in.
         
 
 def setup(client):

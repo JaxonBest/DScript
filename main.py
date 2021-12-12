@@ -51,7 +51,11 @@ def arg(command, ln) -> str:
     if len(command['args']) < 1:
         raise Exception('Line {}\nYou must give the argument a name.')
     args.append('_'.join(x for x in command['args'][0:]))
+    variables.append({'name': '_'.join(x for x in command['args'][0:]), 'value': None, 'type': 'arg'})
     return ''
+
+def r(command, ln):
+    return raw(command, ln)
 
 def getchannel(command, ln) -> str: 
     by = command['args'][0].lower()
