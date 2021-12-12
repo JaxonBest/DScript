@@ -124,3 +124,15 @@ arg user
 c The below argument will default to hello_world since any space will transfer to a _
 arg hello world 
 ```
+
+### Working with the Executer
+
+By **Executer** I mean the user that has executed the command.
+
+Here a couple of examples on things you can with the **executer**.
+
+```txt
+// Get the plain user object and store it into a variable.
+// The first argument is the variable to store the user object into.
+get_executer my_user
+```

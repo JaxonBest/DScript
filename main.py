@@ -76,8 +76,11 @@ def get_executer(command, ln) -> str:
     if len(command['args']) < 1:
         raise Exception('Line: {}\nWhen using the get_executer command you must reference the name of the variable to store it into. (New Variable)')
     saving_name = command['args'][0]
-
+    variables.append({'name': saving_name, 'value': 'ctx.author', 'type': 'executer'})
     return '{} = ctx.author'.format(saving_name)
+
+def gex(command, ln) -> str:
+    return get_executer(command, ln)
 
 def _get_and_check_if_var(arg: str) -> tuple:
     is_v = None
@@ -214,6 +217,11 @@ class {}(commands.Bot):
 def setup(client):
     client.add_cog({}(client))
 '''.format(name, name,  name, ", " if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
+
+# Check if ctx is a variable used.
+# If so raise an exception.
+if 'ctx' in variables:
+    raise Exception('Line UNKNOWN\nYou have tried to create the varaiable ctx.\nFor saftey reason please remove this.')
 
 print("Compiling DSC into Python..")
 with open('test.py', 'w') as f:
