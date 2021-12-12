@@ -135,4 +135,6 @@ Here a couple of examples on things you can with the **executer**.
 // Get the plain user object and store it into a variable.
 // The first argument is the variable to store the user object into.
 get_executer my_user
+// or do it the short way
+gex my_user_
 ```
