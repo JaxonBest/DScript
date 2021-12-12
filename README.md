@@ -1,5 +1,9 @@
 # Discord Script
 
+DSC is a preprocessor to create custom commands for discord users.
+
+It's main goal is to allow users on discord to make their own custom commands to run on a bot straight in discord.
+
 ## How to use.
 
 1. Create a file like 'first.dsc'
