@@ -66,7 +66,10 @@ Here are the following methods you can use with text channels.
 #### Getting a Text Channel from ID/Name
 
 ```txt
+// Do it this way.
 getchannel id my_channel_stored_variable $my_channel_id_var
+// Or this way
+getch name my_channel_stored_variable_ general-chat
 ```
 
 #### Send a message/variable to a channel via variable

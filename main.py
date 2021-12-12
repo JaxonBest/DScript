@@ -165,7 +165,7 @@ def get_parts(line: str, line_number: int) -> dict:
     }
 
 output = []
-symbol_relations = {'//': com}
+symbol_relations = {'//': com, 'getch': getchannel}
 
 fl = _filter_lines(lines)
 for i in range(len(fl)):
