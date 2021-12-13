@@ -1,2 +1,3 @@
-var hello 10000
-getuser $hello helloworld
+var x ""
+var hello "Hello, " + "World"
+kick $x $hello ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !

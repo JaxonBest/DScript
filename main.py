@@ -18,6 +18,26 @@ def getuser(command, ln) -> str:
 
     return '{} = self.client.get_user({})'.format(command['args'][1], ref)        
 
+def kick(command, ln) -> str:
+    if len(command['args']) < 1:
+        SyntaxError('Line {}\nRequired a user variable.'.format(ln))
+    # Check if variable exists
+    _variable, _is_variable = _get_and_check_if_var(command['args'][0][1:])
+    if not _is_variable:
+        raise SyntaxError('Line {}\n"{}" does not exist.'.format(ln, command['args'][0][1:]))
+    # Perform another check to see if a reason has been supplied.
+    reason = None
+    if len(command['args']) >= 2:
+        reason = '"' + ' '.join(x for x in command['args'][1:]) + '"'
+        vi = _get_and_check_if_var(command['args'][1][1:])
+        if vi[1]:
+            reason = vi[0]['name']
+            if len(command['args']) >= 3:
+                for _a in range(2, len(command['args'])):
+                    reason += '+"{}"'.format(command['args'][_a].replace('"', "'"))
+    
+    return 'await {}.kick({})'.format(_variable['name'], ('reason=' + reason) if reason is not None else '')
+
 def sendto(command, ln) -> str:
     if len(command['args']) <= 1:
         raise SyntaxError('Line {}\nWhen using "sento" you must supply a channel and then a message/variable to use.'

@@ -14,8 +14,9 @@ class untitled_command(commands.Bot):
     
     @commands.command(name="untitled_command")
     async def untitled_command(self, ctx ):
-        hello = 10000
-        helloworld = self.client.get_user(int(hello))
+        x = ""
+        hello = "Hello, " + "World"
+        await x.kick(reason=hello+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!")
         
 
 def setup(client):
