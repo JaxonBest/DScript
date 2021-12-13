@@ -31,10 +31,10 @@ def kick(command, ln) -> str:
         reason = '"' + ' '.join(x for x in command['args'][1:]) + '"'
         vi = _get_and_check_if_var(command['args'][1][1:])
         if vi[1]:
-            reason = vi[0]['name']
+            reason = "str(" + vi[0]['name'] + ")"
             if len(command['args']) >= 3:
                 for _a in range(2, len(command['args'])):
-                    reason += '+"{}"'.format(command['args'][_a].replace('"', "'"))
+                    reason += '+" {}"'.format(command['args'][_a].replace('"', "'"))
     
     return 'await {}.kick({})'.format(_variable['name'], ('reason=' + reason) if reason is not None else '')
 

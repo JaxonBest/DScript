@@ -16,7 +16,7 @@ class untitled_command(commands.Bot):
     async def untitled_command(self, ctx ):
         x = ""
         hello = "Hello, " + "World"
-        await x.kick(reason=hello+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!"+"!")
+        await x.kick(reason=str(hello)+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !")
         
 
 def setup(client):

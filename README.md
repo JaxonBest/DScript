@@ -159,7 +159,7 @@ This command is very common and a lot of the time you really don't want to keep 
 
 So you can use another phrase/alias called `gus` - **G - Get | us - User**
 
-```
+```txt
 // Same as before but shorter
 gus 10000 my_other_user_
 ```
@@ -168,8 +168,41 @@ Finally instead of hard coding an identification.
 
 You can use a variable instead. 
 
-```
+```txt
 // My Variable
 var somebody 10000
 getuser $somebody _my_other_user_
+```
+
+### Moderation
+
+A lot of bots target moderation as their main purpose.
+
+DSC has simplified the process of moderating a user inside of Discord.
+
+#### Kick a Discord User
+
+The following command will kick a user for the reason: "My Reason"
+
+```txt
+getuser 10101010 my_user
+kick $my_user My Reason
+```
+
+You do not have to specify a reason like the following.
+
+```txt
+kick $my_user
+```
+
+Or you can specify a reason inside of a variable like the following:
+
+```
+var kick_reason "Spam"
+kick $my_user $kick_reason
+```
+
+You can also append str text to this
+```
+kick $my_user $kick_reason - Do not do this again!
 ```
