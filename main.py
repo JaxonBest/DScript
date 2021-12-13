@@ -12,6 +12,12 @@ def com(command, ln) -> str:
 def c(command, ln):
     return com(command, ln)
 
+def getuser(command, ln) -> str:
+    u_var, u_var_exists = _get_and_check_if_var(command['args'][0][1:])
+    ref = 'int({})'.format(u_var['name'] if u_var_exists else ('"' + command['args'][0] + '"'))
+
+    return '{} = self.client.get_user({})'.format(command['args'][1], ref)        
+
 def sendto(command, ln) -> str:
     if len(command['args']) <= 1:
         raise SyntaxError('Line {}\nWhen using "sento" you must supply a channel and then a message/variable to use.'
@@ -44,8 +50,10 @@ def use(command, ln) -> str:
 
 def raw(command, ln) -> str:
     if len(command) < 1:
-        raise SyntaxError('Line {}\nMust have one or more arguments inside of a "raw" method.')
-    return ' '.join(x for x in command['args'])
+        raise SyntaxError('Line {}\nMust have one or more arguments inside of a "raw" method.'.format(ln))
+
+
+    return ' '.join([command['args'][i] + ' ' for i in range(len())])
 
 def arg(command, ln) -> str:
     if len(command['args']) < 1:
@@ -130,6 +138,8 @@ def send(command, ln) -> str:
 
     return 'ctx.send({}) # Sending a message to the same channel the message was sent in.'.format(val)
 
+
+
 def sformat(command, ln) -> str:
     return ' '.join(x for x in command['args'])
 
@@ -203,7 +213,7 @@ for froms in from_imports:
 header += '\n'
 
 for line in output:
-    compiled += '\t\t' + line
+    compiled += '        ' + line
 
 base = '''
 class {}(commands.Bot):
@@ -211,7 +221,7 @@ class {}(commands.Bot):
         self.client = client
     
     @commands.command(name="{}")
-    async def {}(ctx{} {}):
+    async def {}(self, ctx{} {}):
 {}        
 
 def setup(client):
@@ -221,7 +231,7 @@ def setup(client):
 # Check if ctx is a variable used.
 # If so raise an exception.
 if 'ctx' in variables:
-    raise Exception('Line UNKNOWN\nYou have tried to create the varaiable ctx.\nFor saftey reason please remove this.')
+    raise Exception('Line UNKNOWN\nYou have tried to create the variable ctx.\nFor safety reason please remove this.')
 
 print("Compiling DSC into Python..")
 with open('test.py', 'w') as f:

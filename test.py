@@ -14,8 +14,8 @@ class untitled_command(commands.Bot):
     
     @commands.command(name="untitled_command")
     async def untitled_command(ctx ):
-		user = ctx.author
-		user.send("Hello")
+		hello = 10000
+		helloworld = self.client.get_user(int(hello))
         
 
 def setup(client):

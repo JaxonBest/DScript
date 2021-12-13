@@ -1,2 +1,2 @@
-gex user
-sendto $user Hello
+var hello 10000
+getuser $hello helloworld
