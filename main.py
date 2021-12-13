@@ -175,7 +175,7 @@ def get_parts(line: str, line_number: int) -> dict:
     }
 
 output = []
-symbol_relations = {'//': com, 'getch': getchannel}
+symbol_relations = {'//': com, 'getch': getchannel, 'gus': getuser}
 
 fl = _filter_lines(lines)
 for i in range(len(fl)):

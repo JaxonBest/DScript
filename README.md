@@ -141,3 +141,35 @@ get_executer my_user
 // or do it the short way
 gex my_user_
 ```
+
+### Get User
+
+A lot of the time your command will involve other users.
+
+Not just the one that executes the command. 
+
+Inside of DSC there is a keyword you can use to get a user by their ID.
+
+```txt
+// Arguments: ID, Storing Variable.
+getuser 10000 my_other_user
+```
+
+This command is very common and a lot of the time you really don't want to keep typing out `get_user`
+
+So you can use another phrase/alias called `gus` - **G - Get | us - User**
+
+```
+// Same as before but shorter
+gus 10000 my_other_user_
+```
+
+Finally instead of hard coding an identification.
+
+You can use a variable instead. 
+
+```
+// My Variable
+var somebody 10000
+getuser $somebody _my_other_user_
+```
