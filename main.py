@@ -6,6 +6,8 @@ from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
 args = []
 name = 'untitled_command'
 
+lines_written = 0
+
 def com(command, ln) -> str:
     return '# {}'.format(' '.join(x for x in command['args']))
 
@@ -156,8 +158,7 @@ def send(command, ln) -> str:
         used_var = found_val_var if not None else ("'" + command['joined_args'] + '"')
         val = used_var
 
-    return 'ctx.send({}) # Sending a message to the same channel the message was sent in.'.format(val)
-
+    return 'ctx.send({})'.format(val)
 
 
 def sformat(command, ln) -> str:
@@ -181,7 +182,7 @@ def var(command, ln) -> str:
     if command['args'][0] == '=':
         raise SyntaxError('Line {}\nCannot use "=" sign when assigning a variable in DSC. (name value value value etc)')
 
-    return '{} = {}'.format(name, value)
+    return '{}={}'.format(name, value)
 
 def get_parts(line: str, line_number: int) -> dict:
     parts = line.split(' ')
@@ -218,6 +219,7 @@ for i in range(len(fl)):
     
     ret = method(p, line_number) if not iv else symbol_relations[p['command']](p, line_number)
     output.append(ret + '\n' if ret != '' or ret != None else '')
+    lines_written += 1
 
 header = ''
 
@@ -259,4 +261,4 @@ with open('test.py', 'w') as f:
     f.write(header)
     f.write(base)
 
-print('Successfully compiled command.')
+print('Successfully compiled DSC into Python.\nWrote {} lines.\n'.format(lines_written))

@@ -6,6 +6,7 @@ import discord
 
 # From Imports
 from discord.ext import commands
+from datetime import datetime
 
 
 class untitled_command(commands.Bot):
@@ -14,9 +15,11 @@ class untitled_command(commands.Bot):
     
     @commands.command(name="untitled_command")
     async def untitled_command(self, ctx ):
-        x = ""
-        hello = "Hello, " + "World"
-        await x.kick(reason=str(hello)+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !"+" !")
+        # Importing the modules we need.
+        
+        current_time=datetime.now()
+        current_time = "The current time is " + current_time; 
+        ctx.send(current_time)
         
 
 def setup(client):
