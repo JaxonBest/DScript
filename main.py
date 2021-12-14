@@ -1,5 +1,8 @@
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
+from methods import *
+d
+
 variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
