@@ -1,3 +1,13 @@
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='DScript Compiler.')
+
+# Add the arguments.
+parser.add_argument('--ignore-comments', dest='ignore_comments', action='store_false', required=False)
+parser.add_argument('-o', '--out', dest='output', required=True)
+
+compiler_args = parser.parse_args()
+
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
 finishing_lines = []
@@ -11,7 +21,7 @@ decorators = []
 lines_written = 0
 
 def com(command, ln) -> str:
-    return '# {}'.format(' '.join(x for x in command['args']))
+    return '# {}'.format(' '.join(x for x in command['args'])) if compiler_args.ignore_comments else ''
 
 def c(command, ln):
     return com(command, ln)
@@ -249,7 +259,9 @@ for i in range(len(fl)):
             raise SyntaxError('Line {}\n"{}" does not exist. Maybe try checking your spelling.'.format(line_number, p['command']))
     
     ret = method(p, line_number) if not iv else symbol_relations[p['command']](p, line_number)
-    output.append(ret + '\n' if ret != '' or ret != None else '')
+    output_line = ret + '\n' if ret != '' or ret != None else ''
+    if output_line.replace(' ', '') != '':
+        output.append(output_line)
     lines_written += 1
 
 header = ''
@@ -294,7 +306,7 @@ if 'ctx' in variables:
     raise Exception('Line UNKNOWN\nYou have tried to create the variable ctx.\nFor safety reason please remove this.')
 
 print("Compiling DSC into Python..")
-with open('test.py', 'w') as f:
+with open(compiler_args.output, 'w') as f:
     f.write('# Compiled with the DS Script Compiler.\n# {}\n\n'.format('-' * 35))
     f.write(header)
     f.write(base)
