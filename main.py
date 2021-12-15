@@ -5,10 +5,11 @@ parser = ArgumentParser(description='DScript Compiler.')
 # Add the arguments.
 parser.add_argument('--ignore-comments', dest='ignore_comments', action='store_false', required=False)
 parser.add_argument('-o', '--out', dest='output', required=True)
+parser.add_argument('-i', '--in', dest='infile', required=True)
 
 compiler_args = parser.parse_args()
 
-lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
+lines = open(compiler_args.infile, 'r').read().splitlines() # Get each line.
 
 finishing_lines = []
 variables = []
@@ -308,7 +309,8 @@ if 'ctx' in variables:
 print("Compiling DSC into Python..")
 with open(compiler_args.output, 'w') as f:
     f.write('# Compiled with the DS Script Compiler.\n# {}\n\n'.format('-' * 35))
-    f.write(header)
-    f.write(base)
+    final = header + '\n' + base
+    final = '\n'.join(x for x in _filter_lines(final.split('\n')))
+    f.write(final)
 
 print('Successfully compiled DSC into Python.\nWrote {} lines.\n'.format(lines_written))
