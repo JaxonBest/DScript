@@ -1,5 +1,6 @@
 lines = open('./test.dsc', 'r').read().splitlines() # Get each line.
 
+finishing_lines = []
 variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
@@ -18,7 +19,30 @@ def getuser(command, ln) -> str:
     u_var, u_var_exists = _get_and_check_if_var(command['args'][0][1:])
     ref = 'int({})'.format(u_var['name'] if u_var_exists else ('"' + command['args'][0] + '"'))
 
-    return '{} = self.client.get_user({})'.format(command['args'][1], ref)        
+    return '{}=self.client.get_user({})'.format(command['args'][1], ref)        
+
+
+def ban(command, ln) -> str:
+    if len(command['args']) < 1:
+        SyntaxError('Line {}\nRequired a user variable.'.format(ln))
+    # Check if variable exists
+    _variable, _is_variable = _get_and_check_if_var(command['args'][0][1:])
+    if not _is_variable:
+        raise SyntaxError('Line {}\n"{}" does not exist.'.format(
+            ln, command['args'][0][1:]))
+    # Perform another check to see if a reason has been supplied.
+    reason = None
+    if len(command['args']) >= 2:
+        reason = '"' + ' '.join(x for x in command['args'][1:]) + '"'
+        vi = _get_and_check_if_var(command['args'][1][1:])
+        if vi[1]:
+            reason = "str(" + vi[0]['name'] + ")"
+            if len(command['args']) >= 3:
+                for _a in range(2, len(command['args'])):
+                    reason += '+" {}"'.format(command['args']
+                                              [_a].replace('"', "'"))
+
+    return 'await {}.ban({})'.format(_variable['name'], ('reason=' + reason) if reason is not None else '')
 
 def kick(command, ln) -> str:
     if len(command['args']) < 1:
@@ -75,7 +99,7 @@ def raw(command, ln) -> str:
         raise SyntaxError('Line {}\nMust have one or more arguments inside of a "raw" method.'.format(ln))
 
 
-    return ' '.join([command['args'][i] + ' ' for i in range(len())])
+    return ' '.join([command['args'][i] + ' ' for i in range(len(command['args']))])
 
 def arg(command, ln) -> str:
     if len(command['args']) < 1:
@@ -248,7 +272,7 @@ class {}(commands.Bot):
 
 def setup(client):
     client.add_cog({}(client))
-'''.format(name, name,  name, ", " if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
+'''.format(name, name,  name, "," if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
 
 # Check if ctx is a variable used.
 # If so raise an exception.
