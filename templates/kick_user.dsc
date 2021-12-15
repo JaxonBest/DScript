@@ -1,7 +1,7 @@
 // Make sure the user has permission the kick members.
 require commands.has_permissions(kick_members=True)
 
-// Create the arguments that will be intaked.
+// Create the arguments that will be taken in.
 arg target user
 //  ^^^^^^ ^^^^ <= will get translated to 'target_user'
 
