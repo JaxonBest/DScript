@@ -6,6 +6,7 @@ to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
 args = []
 name = 'untitled_command'
+decorators = []
 
 lines_written = 0
 
@@ -63,6 +64,12 @@ def kick(command, ln) -> str:
                     reason += '+" {}"'.format(command['args'][_a].replace('"', "'"))
     
     return 'await {}.kick({})'.format(_variable['name'], ('reason=' + reason) if reason is not None else '')
+
+def require(command, ln) -> str:
+    if len(command['args']) < 1:
+        raise SyntaxError('Line {}\nMust supply at least one argument. aka the decorator value.')
+    decorators.append('@'+' '.join(x.replace('"', "'") for x in command['args']))
+    return ''
 
 def sendto(command, ln) -> str:
     if len(command['args']) <= 1:
@@ -261,18 +268,25 @@ header += '\n'
 for line in output:
     compiled += '        ' + line
 
+
+decorators_formatted = ''
+for i in range(len(decorators)):
+    decorators_formatted += '    ' + decorators[i] + ('\n' if i+1 < len(decorators) else '')
+
 base = '''
+
 class {}(commands.Bot):
     def __init__(self, client):
         self.client = client
     
+{}
     @commands.command(name="{}")
     async def {}(self, ctx{} {}):
 {}        
 
 def setup(client):
     client.add_cog({}(client))
-'''.format(name, name,  name, "," if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
+'''.format(name, decorators_formatted, name, name, "," if len(args) >= 1 else '', ",".join(x for x in args), compiled, name)
 
 # Check if ctx is a variable used.
 # If so raise an exception.
