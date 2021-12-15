@@ -42,7 +42,7 @@ $my_name
 
 ```
 var welcome None
-get_executer variable_name_storing_author
+getexecuter variable_name_storing_author
 cvv welcome f"Hello, {variable_name_storing_author}"
 send $welcome
 ```
@@ -137,7 +137,7 @@ Here a couple of examples on things you can with the **executer**.
 ```txt
 // Get the plain user object and store it into a variable.
 // The first argument is the variable to store the user object into.
-get_executer my_user
+getexecuter my_user
 // or do it the short way
 gex my_user_
 ```

@@ -133,7 +133,7 @@ def getchannel(command, ln) -> str:
     variables.append({'name': command['args'][1], 'value': ref})
     return '{} = discord.utils.get(ctx.guild.channels, {}={})'.format(command['args'][1], command['args'][0].lower(), ref)
 
-def get_executer(command, ln) -> str:
+def getexecuter(command, ln) -> str:
     if len(command['args']) < 1:
         raise Exception('Line: {}\nWhen using the get_executer command you must reference the name of the variable to store it into. (New Variable)')
     saving_name = command['args'][0]
@@ -141,7 +141,7 @@ def get_executer(command, ln) -> str:
     return '{} = ctx.author'.format(saving_name)
 
 def gex(command, ln) -> str:
-    return get_executer(command, ln)
+    return getexecuter(command, ln)
 
 def _get_and_check_if_var(arg: str) -> tuple:
     is_v = None
