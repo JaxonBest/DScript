@@ -14,7 +14,7 @@ kick $target_user $reason
 // Create a variable holding the success message.
 // You can write it directly inside of the send command. 
 // But for this sake I will create a variable.
-var success_message 'Succesfully kicked ' + target_user.mention
+var success_message 'Successfully kicked ' + target_user.mention
 //                                            ^ <= No '$' symbol because when creating variables
 //                                                 It's executed as pure Python. (For flexibility). 
 //                                                 Be careful because the compiler doesn't check pure Python..
