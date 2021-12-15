@@ -206,3 +206,24 @@ You can also append str text to this
 ```
 kick $my_user $kick_reason - Do not do this again!
 ```
+
+The exact some with the ban keyword but with the keyword *ban* instead if **kick**.
+
+```txt
+ban $my_user $ban_reason
+```
+
+### Adding conditions/decorators to your commands
+
+Often you want a condition to be run before executing your command.
+
+Decorators inside of Python are a great way of doing that.
+
+You can use a decorator like the following:
+
+```txt
+require has_permissions(kick_members=True)
+require has_permissions(ban_members=False)
+// etc
+```
+
