@@ -6,7 +6,8 @@ parser = ArgumentParser(description='DScript Compiler.')
 parser.add_argument('--ignore-comments', dest='ignore_comments', action='store_false', required=False)
 parser.add_argument('-o', '--out', dest='output', required=True)
 parser.add_argument('-i', '--in', dest='infile', required=True)
-parser.add_argument('-ignore-undefined-variables', required=False, dest='ignore_undefined_variable', action='store_true')
+parser.add_argument('--ignore-undefined-variables', required=False, dest='ignore_undefined_variable', action='store_true')
+parser.add_argument('--allow-context-override', required=False, dest='allow_context_override', action='store_true')
 
 compiler_args = parser.parse_args()
 
@@ -322,7 +323,10 @@ def setup(client):
 # Check if ctx is a variable used.
 # If so raise an exception.
 if 'ctx' in variables:
-    raise Exception('Line UNKNOWN\nYou have tried to create the variable ctx.\nFor safety reason please remove this.')
+    if not compiler_args.allow_context_override:
+        raise Exception('Line UNKNOWN\nYou have tried to create the variable ctx.\nFor safety reason please remove this.')
+    else:
+        print('Found `ctx` - Skipping because --allow-context-override is set to True.')
 
 print("Compiling DSC into Python..")
 with open(compiler_args.output, 'w') as f:
