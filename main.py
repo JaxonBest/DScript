@@ -8,6 +8,7 @@ parser.add_argument('-o', '--out', dest='output', required=True)
 parser.add_argument('-i', '--in', dest='infile', required=True)
 parser.add_argument('--ignore-undefined-variables', required=False, dest='ignore_undefined_variable', action='store_true')
 parser.add_argument('--allow-context-override', required=False, dest='allow_context_override', action='store_true')
+parser.add_argument('-n', '--name', help='Name of command', dest='name', required=True)
 
 compiler_args = parser.parse_args()
 
@@ -18,7 +19,7 @@ variables = []
 to_import = ['discord']
 from_imports = [{'from': 'discord.ext', 'import': 'commands'}]
 args = []
-name = 'untitled_command'
+name = 'untitled_command' if compiler_args.name is None else compiler_args.name
 decorators = []
 
 lines_written = 0
@@ -99,7 +100,7 @@ def sendto(command, ln) -> str:
     cnt_var, cnt_is_var = _get_and_check_if_var(pos_var_content[1:]) # Indexing here to remove the '$'
     if cnt_is_var:
         cnt_res = cnt_var['name']
-    return '{}.send({})'.format(channel_var['name'], cnt_res)
+    return 'await {}.send({})'.format(channel_var['name'], cnt_res)
 
 def log(command, ln) -> str:
     res = '""'
@@ -219,7 +220,7 @@ def send(command, ln) -> str:
         used_var = found_val_var if not None else ("'" + command['joined_args'] + '"')
         val = used_var
 
-    return 'ctx.send({})'.format(val)
+    return 'await ctx.send({})'.format(val)
 
 
 def sformat(command, ln) -> str:
