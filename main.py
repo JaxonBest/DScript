@@ -322,7 +322,7 @@ def setup(client):
 
 # Check if ctx is a variable used.
 # If so raise an exception.
-if 'ctx' in variables:
+if _get_and_check_if_var('ctx')[1]:
     if not compiler_args.allow_context_override:
         raise Exception('Line UNKNOWN\nYou have tried to create the variable ctx.\nFor safety reason please remove this.')
     else:
