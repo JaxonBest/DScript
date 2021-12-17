@@ -98,6 +98,22 @@ def sendto(command, ln) -> str:
         cnt_res = cnt_var['name']
     return '{}.send({})'.format(channel_var['name'], cnt_res)
 
+def log(command, ln) -> str:
+    res = '""'
+    for _argument in command['args']:
+        if _argument[0] == '$':
+
+            _v_check = _get_and_check_if_var(_argument[1:])
+            if not _v_check[1]:
+                raise SyntaxError(
+                    'Line {}\n"{}" is not a variable. Maybe you forgot to add the "$"?'.format(ln, _argument[1:]))
+            else:
+                res += '+str({})'.format(_v_check[0]['name'])
+                continue
+        else:
+            res += '+" {}"'.format(_argument.replace('"', "'"))
+    return 'print({})'.format(res)
+
 def use(command, ln) -> str:
     if len(command['args']) < 1:
         raise SyntaxError('Line {}\n"use" requires a import name/argument to be supplied.'.format(ln))
