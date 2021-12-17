@@ -1,4 +1,4 @@
+var console_message "Hello Console!"
+log $console_message
 
-
-var hello "Hello, World -> "
-log $hello true
+LOG This is the console message: $console_message

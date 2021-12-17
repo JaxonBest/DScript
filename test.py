@@ -10,7 +10,8 @@ class untitled_command(commands.Bot):
         self.client = client
     @commands.command(name="untitled_command")
     async def untitled_command(self, ctx ):
-        hello="Hello, World -> "
-        print(""+str(hello)+" true")
+        console_message="Hello Console!"
+        print(""+str(console_message))
+        print(""+" This"+" is"+" the"+" console"+" message:"+str(console_message))
 def setup(client):
     client.add_cog(untitled_command(client))

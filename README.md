@@ -227,3 +227,13 @@ require has_permissions(ban_members=False)
 // etc
 ```
 
+### Logging to the console
+
+To log to the console you can use the following.
+
+```txt
+var console_message "Hello Console!"
+log $console_message
+
+log This is the console message: $console_message
+```
