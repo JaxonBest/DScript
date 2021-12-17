@@ -6,6 +6,7 @@ parser = ArgumentParser(description='DScript Compiler.')
 parser.add_argument('--ignore-comments', dest='ignore_comments', action='store_false', required=False)
 parser.add_argument('-o', '--out', dest='output', required=True)
 parser.add_argument('-i', '--in', dest='infile', required=True)
+parser.add_argument('-ignore-undefined-variables', required=False, dest='ignore_undefined_variable', action='store_true')
 
 compiler_args = parser.parse_args()
 
@@ -39,7 +40,7 @@ def ban(command, ln) -> str:
         SyntaxError('Line {}\nRequired a user variable.'.format(ln))
     # Check if variable exists
     _variable, _is_variable = _get_and_check_if_var(command['args'][0][1:])
-    if not _is_variable:
+    if not _is_variable and not compiler_args.ignore_undefined_variable:
         raise SyntaxError('Line {}\n"{}" does not exist.'.format(
             ln, command['args'][0][1:]))
     # Perform another check to see if a reason has been supplied.
@@ -62,7 +63,8 @@ def kick(command, ln) -> str:
     # Check if variable exists
     _variable, _is_variable = _get_and_check_if_var(command['args'][0][1:])
     if not _is_variable:
-        raise SyntaxError('Line {}\n"{}" does not exist.'.format(ln, command['args'][0][1:]))
+        if not compiler_args.ignore_undefined_variable:
+            raise SyntaxError('Line {}\n"{}" does not exist.'.format(ln, command['args'][0][1:])) 
     # Perform another check to see if a reason has been supplied.
     reason = None
     if len(command['args']) >= 2:
@@ -88,7 +90,7 @@ def sendto(command, ln) -> str:
         .format(ln))
     pos_var_content = command['args'][1]
     channel_var, is_channel_var = _get_and_check_if_var(command['args'][0][1:])
-    if not is_channel_var:
+    if not is_channel_var and not compiler_args.ignore_undefined_variable:
         raise Exception('Line {}\n"{}" is not a variable. Maybe you forgot to add the "$"?'
         .format(ln, command['args'][0][1:]))
 
@@ -104,7 +106,7 @@ def log(command, ln) -> str:
         if _argument[0] == '$':
 
             _v_check = _get_and_check_if_var(_argument[1:])
-            if not _v_check[1]:
+            if not _v_check[1] and not compiler_args.ignore_undefined_variable:
                 raise SyntaxError(
                     'Line {}\n"{}" is not a variable. Maybe you forgot to add the "$"?'.format(ln, _argument[1:]))
             else:
@@ -191,10 +193,10 @@ def cvv(command, ln) -> str:
         if var['name'] == command['args'][0][1:]:
             var_info = var
             at_index = varI
-    if var_info is None:
+    if var_info is None and not compiler_args.ignore_undefined_variable:
         raise ReferenceError('Line {}\nCannot find variable named "{}".\nReminder: You cannot change the value a variable before you have assigned it.'
         .format(ln, command['args'][0]))
-    if len(command['args']) <= 1:
+    if len(command['args']) <= 1 and not compiler_args.ignore_undefined_variable:
         raise Exception('Line {}\nCannot reassign variable "{}" with no value.'.format(ln, var_info['name']))
 
     c = " ".join(x for x in command['args'][1:])
@@ -210,8 +212,8 @@ def send(command, ln) -> str:
             if variable['name'] == used_var:
                 found_val_var = variable['name']
                 break
-        if found_val_var is None:
-            raise SyntaxError('Line {}\nTried to find variable named "{}" but failed.'.format(ln, used_var))
+        if found_val_var is None and not compiler_args.ignore_undefined_variable:
+            raise ReferenceError('Line {}\nTried to find variable named "{}" but failed.'.format(ln, used_var))
             
         used_var = found_val_var if not None else ("'" + command['joined_args'] + '"')
         val = used_var
@@ -272,7 +274,7 @@ for i in range(len(fl)):
     if not method:
         if symbol_relations.get(p['command']) is not None:
             iv = True
-        else:
+        elif symbol_relations.get(p['command']) is None and not compiler_args.ignore_undefined_variable:
             raise SyntaxError('Line {}\n"{}" does not exist. Maybe try checking your spelling.'.format(line_number, p['command']))
     
     ret = method(p, line_number) if not iv else symbol_relations[p['command']](p, line_number)
